@@ -2,191 +2,87 @@
   const entries = [
     {
       label: 'family size',
-      content:
-        '父 183cm｜母 167cm｜私 169cm｜弟 189cm<br>4人で歩くとかなり目立ちます。はぐれません。'
+      content: '父 183cm｜母 167cm｜私 169cm｜弟 189cm<br>4人で歩くとかなり目立ちます。はぐれません。'
     },
-
     {
       label: 'food',
-      content:
-        'pizza｜sushi｜fruits<br>肉類はかなり苦手です'
+      content: 'pizza｜sushi｜fruits<br>肉類はかなり苦手です'
     },
-
     {
       label: 'club history',
-      content:
-        '音楽部 → 帰宅部 → 合唱<br>帰宅部まじで極めてました。'
+      content: '音楽部 → 帰宅部 → 合唱<br>帰宅部まじで極めてました。'
     },
-
     {
       label: 'playlist',
-      content:
-        'Mrs. GREEN APPLE｜RADWIMPS｜SEVENTEEN｜IU｜Charlie Puth｜Sia'
+      content: 'Mrs. GREEN APPLE｜RADWIMPS｜SEVENTEEN｜IU｜Charlie Puth｜Sia'
     },
-
     {
       label: 'anime',
-      content:
-        'かなり無知です。<br>進撃を見始めました。<br>おすすめ募集中。'
+      content: 'かなり無知です。<br>進撃を見始めました。<br>おすすめ募集中。'
     },
-
     {
       label: 'drama mode',
-      content:
-        'クールごとにほぼ全ドラマ1話視聴。<br>継続するか判断しています。'
+      content: 'クールごとにほぼ全ドラマ1話視聴。<br>継続するか判断しています。'
     },
-
     {
       label: 'current season',
-      content:
-        'リボーン｜田鎖ブラザーズ'
+      content: 'リボーン｜田鎖ブラザーズ'
     },
-
     {
       label: 'line stamp collection',
-      content:
-        '癖の強いLINEスタンプを集めています。<br>おすすめ：アメリカにいそうなマッチョ'
+      content: '癖の強いLINEスタンプを集めています。<br>おすすめ：アメリカにいそうなマッチョ'
     },
-
     {
       label: 'recommended spot',
-      content:
-        'LEGOLAND<br>魅力を永遠に語れます。'
+      content: 'LEGOLAND<br>魅力を永遠に語れます。'
     },
-
     {
       label: 'location',
-      content:
-        '名古屋市東区｜千種駅付近<br>母の飯をタダで食らう日々。'
+      content: '名古屋市東区｜千種駅付近<br>母の飯をタダで食らう日々。'
     },
-
     {
       label: 'faculty',
-      content:
-        '教育学部<br>8月、お盆以外ずっと1限集中講義で泣いています。'
+      content: '教育学部<br>お盆以外ずっと1限で泣いています。'
     }
   ];
 
   const button = document.getElementById('drawButton');
   const card = document.getElementById('card');
 
-  // 保存済みカード
-  let collected =
-    JSON.parse(localStorage.getItem('collectedCards')) || [];
+  let collected = JSON.parse(localStorage.getItem('collectedCards') || '[]');
 
-  // 未取得カードだけ抽選対象にする
-  let remaining = entries.filter(
-    entry =>
-      !collected.some(saved => saved.label === entry.label)
-  );
+  function getRemaining() {
+    return entries.filter(e => !collected.some(c => c.label === e.label));
+  }
 
-  // 進捗表示
   function updateProgress() {
     document.querySelector('.title').textContent =
       `ARCHIVE ${collected.length} / ${entries.length}`;
   }
 
-  // カード一覧表示
-  function renderCollection() {
-    let existing = document.getElementById('collection');
-
-    if (!existing) {
-      existing = document.createElement('div');
-      existing.id = 'collection';
-
-      existing.style.display = 'grid';
-      existing.style.gridTemplateColumns = '1fr 1fr';
-      existing.style.gap = '10px';
-      existing.style.marginTop = '10px';
-
-      document.querySelector('.container').appendChild(existing);
-    }
-
-    existing.innerHTML = '';
-
-    entries.forEach(entry => {
-
-      const unlocked =
-        collected.some(saved => saved.label === entry.label);
-
-      const item = document.createElement('div');
-
-      item.style.background =
-        unlocked
-          ? 'rgba(255,255,255,0.08)'
-          : 'rgba(255,255,255,0.03)';
-
-      item.style.border =
-        '1px solid rgba(255,255,255,0.08)';
-
-      item.style.borderRadius = '14px';
-
-      item.style.padding = '12px';
-
-      item.style.fontSize = '11px';
-
-      item.style.letterSpacing = '0.08em';
-
-      item.style.opacity =
-        unlocked ? '1' : '0.35';
-
-      item.style.textTransform = 'uppercase';
-
-      item.innerHTML =
-        unlocked
-          ? entry.label
-          : '???';
-
-      existing.appendChild(item);
-    });
-  }
-
   button.addEventListener('click', () => {
 
-    if (remaining.length === 0) {
+    let remaining = getRemaining();
 
+    if (remaining.length === 0) {
       card.innerHTML =
         '<div class="label">complete</div>' +
         '<div class="content">all entries collected.</div>';
-
       return;
     }
 
-    // ランダム抽選
-    const randomIndex =
-      Math.floor(Math.random() * remaining.length);
-
+    const randomIndex = Math.floor(Math.random() * remaining.length);
     const random = remaining[randomIndex];
 
-    // 取得済みに追加
     collected.push(random);
+    localStorage.setItem('collectedCards', JSON.stringify(collected));
 
-    // 保存
-    localStorage.setItem(
-      'collectedCards',
-      JSON.stringify(collected)
-    );
-
-    // remainingから削除
-    remaining.splice(randomIndex, 1);
-
-    // 進捗更新
-    updateProgress();
-
-    // カード表示
     card.innerHTML =
       '<div class="label">' + random.label + '</div>' +
       '<div class="content">' + random.content + '</div>';
 
-    // アニメーション再発火
-    card.style.animation = 'none';
-    void card.offsetWidth;
-    card.style.animation = 'fade 0.35s ease';
-
-    // コレクション更新
-    renderCollection();
+    updateProgress();
   });
 
   updateProgress();
-  renderCollection();
 </script>
