@@ -90,10 +90,9 @@
 
     updateProgress();
 
-    card.innerHTML = `
-      <div class="label">${random.label}</div>
-      <div class="content">${random.content}</div>
-    `;
+    card.innerHTML =
+  '<div class="label">' + random.label + '</div>' +
+  '<div class="content">' + random.content + '</div>';
 
     card.style.animation = 'none';
     void card.offsetWidth;
