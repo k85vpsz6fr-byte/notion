@@ -1,182 +1,104 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Random Archive</title>
+<script>
+  const entries = [
+    {
+      label: 'family size',
+      content: '父 183cm｜母 167cm｜私 169cm｜弟 189cm\n4人で歩くとかなり目立ちます。はぐれません。'
+    },
 
-  <style>
-    * {
-      box-sizing: border-box;
+    {
+      label: 'food',
+      content: 'pizza｜sushi｜fruits\n肉類はかなり苦手です'
+    },
+
+    {
+      label: 'club history',
+      content: '音楽部 → 帰宅部 → 合唱\n帰宅部まじで極めてました。'
+    },
+
+    {
+      label: 'playlist',
+      content: 'Mrs. GREEN APPLE｜RADWIMPS｜SEVENTEEN｜IU｜Charlie Puth｜Sia'
+    },
+
+    {
+      label: 'anime',
+      content: 'かなり無知です。\n進撃を見始めました。\nおすすめ募集中。'
+    },
+
+    {
+      label: 'drama mode',
+      content: 'クールごとにほぼ全ドラマ1話視聴。\n継続するか判断しています。'
+    },
+
+    {
+      label: 'current season',
+      content: 'リボーン｜田鎖ブラザーズ'
+    },
+
+    {
+      label: 'line stamp collection',
+      content: '癖の強いLINEスタンプを集めています。\nおすすめ：アメリカにいそうなマッチョ'
+    },
+
+    {
+      label: 'recommended spot',
+      content: 'LEGOLAND\n魅力を永遠に語れます。'
+    },
+
+    {
+      label: 'location',
+      content: '名古屋市東区｜千種駅付近\n母の飯をタダで食らう日々。'
+    },
+
+    {
+      label: 'faculty',
+      content: '教育学部\n8月、お盆以外ずっと1限集中講義で泣いています。'
     }
+  ];
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #0f0f10;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: white;
-    }
+  const button = document.getElementById('drawButton');
+  const card = document.getElementById('card');
 
-    .container {
-      width: 100%;
-      max-width: 520px;
-      padding: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
+  let collected = [];
 
-    .title {
-      font-size: 12px;
-      letter-spacing: 0.3em;
-      opacity: 0.5;
-    }
-
-    button {
-      background: white;
-      color: black;
-      border: none;
-      border-radius: 999px;
-      padding: 14px 22px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: transform 0.2s ease, opacity 0.2s ease;
-    }
-
-    button:hover {
-      transform: scale(1.02);
-      opacity: 0.9;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px;
-      padding: 28px;
-      min-height: 180px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 12px;
-      animation: fade 0.35s ease;
-      backdrop-filter: blur(10px);
-    }
-
-    .label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      opacity: 0.45;
-    }
-
-    .content {
-      font-size: 28px;
-      line-height: 1.4;
-      font-weight: 500;
-      white-space: pre-line;
-    }
-
-    @keyframes fade {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="container">
-    <div class="title">ARCHIVE</div>
-
-    <button id="drawButton">draw random entry</button>
-
-    <div class="card" id="card">
-      <div class="label">entry</div>
-      <div class="content">press the button</div>
-    </div>
-  </div>
-
-  <script>
-   const entries = [
-  {
-    label: 'family size',
-    content: '父 183cm｜母 167cm｜私 169cm｜弟 189cm\n4人で歩くとかなり目立ちます。はぐれません。'
-  },
-
-  {
-    label: 'food',
-    content: 'pizza｜sushi｜fruits/n肉類はかなり苦手です'
-  },
-
-  {
-    label: 'club history',
-    content: '音楽部 → 帰宅部 → 合唱/n帰宅部まじで極めてました。'
-  },
-
-  {
-    label: 'playlist',
-    content: 'Mrs. GREEN APPLE｜RADWIMPS｜SEVENTEEN｜IU｜Charlie Puth｜Sia'
-  },
-
-  {
-    label: 'anime',
-    content: 'まじでなんも知らん。/n進撃を見始めました。おすすめ募集中。'
-  },
-
-  {
-    label: 'drama mode',
-    content: 'クールごとにほぼ全ドラマ1話視聴。/nその後継続するか判断しています。'
-  },
-
-  {
-    label: 'current season favorit drama',
-    content: 'リボーン｜田鎖ブラザーズ'
-  },
-
-  {
-    label: 'line stamp collection',
-    content: '癖の強いLINEスタンプを集めています。/nおすすめ：アメリカにいそうなマッチョ'
-  },
-
-  {
-    label: 'recommended spot',
-    content: 'LEGOLAND/n魅力を永遠に語れます。'
-  },
-
-  {
-    label: 'location',
-    content: '名古屋市東区｜千種駅付近/n母の飯をタダで食らう日々。'
-  },
-
-  {
-    label: 'faculty',
-    content: '教育学部/n8月、お盆以外ずっと1限集中講義で泣いています。'
+  function updateProgress() {
+    document.querySelector('.title').textContent =
+      `ARCHIVE ${collected.length} / ${entries.length}`;
   }
-];
-    const button = document.getElementById('drawButton');
-    const card = document.getElementById('card');
 
-    button.addEventListener('click', () => {
-      const random = entries[Math.floor(Math.random() * entries.length)];
+  button.addEventListener('click', () => {
 
+    const remaining = entries.filter(
+      entry => !collected.includes(entry.label)
+    );
+
+    if (remaining.length === 0) {
       card.innerHTML = `
-        <div class="label">${random.label}</div>
-        <div class="content">${random.content}</div>
+        <div class="label">complete</div>
+        <div class="content">
+          all entries collected.
+        </div>
       `;
 
-      card.style.animation = 'none';
-      void card.offsetWidth;
-      card.style.animation = 'fade 0.35s ease';
-    });
-  </script>
-</body>
-</html>
+      return;
+    }
+
+    const random =
+      remaining[Math.floor(Math.random() * remaining.length)];
+
+    collected.push(random.label);
+
+    updateProgress();
+
+    card.innerHTML = `
+      <div class="label">${random.label}</div>
+      <div class="content">${random.content}</div>
+    `;
+
+    card.style.animation = 'none';
+    void card.offsetWidth;
+    card.style.animation = 'fade 0.35s ease';
+  });
+
+  updateProgress();
+</script>
