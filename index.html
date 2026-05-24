@@ -314,6 +314,28 @@
           item.classList.add('unlocked');
 
           item.innerHTML = entry.label;
+          item.style.cursor = 'pointer';
+
+item.addEventListener('click', () => {
+
+  if (!unlocked) return;
+
+  card.innerHTML =
+    '<div class="label">' +
+    entry.label +
+    '</div>' +
+
+    '<div class="content">' +
+    entry.content +
+    '</div>';
+
+  card.style.animation = 'none';
+
+  void card.offsetWidth;
+
+  card.style.animation = 'fade 0.35s ease';
+
+});
 
         } else {
 
