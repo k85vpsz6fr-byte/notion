@@ -1,104 +1,412 @@
-<script>
-  const entries = [
-    {
-      label: 'family size',
-      content: '父 183cm｜母 167cm｜私 169cm｜弟 189cm<br>4人で歩くとかなり目立ちます。はぐれません。'
-    },
+<!DOCTYPE html>
+<html lang="ja">
 
-    {
-      label: 'food',
-      content: 'pizza｜sushi｜fruits<br>肉類はかなり苦手です'
-    },
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    {
-      label: 'club history',
-      content: '音楽部 → 帰宅部 → 合唱<br>帰宅部まじで極めてました。'
-    },
+  <title>Random Archive</title>
 
-    {
-      label: 'playlist',
-      content: 'Mrs. GREEN APPLE｜RADWIMPS｜SEVENTEEN｜IU｜Charlie Puth｜Sia'
-    },
-
-    {
-      label: 'anime',
-      content: 'かなり無知です。<br>進撃を見始めました。<br>おすすめ募集中。'
-    },
-
-    {
-      label: 'drama mode',
-      content: 'クールごとにほぼ全ドラマ1話視聴。<br>継続するか判断しています。'
-    },
-
-    {
-      label: 'current season',
-      content: 'リボーン｜田鎖ブラザーズ'
-    },
-
-    {
-      label: 'line stamp collection',
-      content: '癖の強いLINEスタンプを集めています。<br>おすすめ：アメリカにいそうなマッチョ'
-    },
-
-    {
-      label: 'recommended spot',
-      content: 'LEGOLAND<br>魅力を永遠に語れます。'
-    },
-
-    {
-      label: 'location',
-      content: '名古屋市東区｜千種駅付近<br>母の飯をタダで食らう日々。'
-    },
-
-    {
-      label: 'faculty',
-      content: '教育学部<br>8月、お盆以外ずっと1限集中講義で泣いています。'
-    }
-  ];
-
-  const button = document.getElementById('drawButton');
-  const card = document.getElementById('card');
-
-  let collected = [];
-
-  function updateProgress() {
-    document.querySelector('.title').textContent =
-      `ARCHIVE ${collected.length} / ${entries.length}`;
-  }
-
-  button.addEventListener('click', () => {
-
-    const remaining = entries.filter(
-      entry => !collected.includes(entry.label)
-    );
-
-    if (remaining.length === 0) {
-      card.innerHTML = `
-        <div class="label">complete</div>
-        <div class="content">
-          all entries collected.
-        </div>
-      `;
-
-      return;
+  <style>
+    * {
+      box-sizing: border-box;
     }
 
-    const random =
-      remaining[Math.floor(Math.random() * remaining.length)];
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    collected.push(random.label);
+      background: #0f0f10;
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      color: white;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 560px;
+
+      padding: 32px;
+
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .title {
+      font-size: 12px;
+      letter-spacing: 0.25em;
+      opacity: 0.45;
+    }
+
+    button {
+      border: none;
+
+      border-radius: 999px;
+
+      padding: 14px 20px;
+
+      background: white;
+      color: black;
+
+      font-size: 14px;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.02);
+      opacity: 0.9;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+
+      border:
+        1px solid rgba(255, 255, 255, 0.08);
+
+      border-radius: 24px;
+
+      padding: 28px;
+
+      min-height: 220px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      gap: 14px;
+
+      backdrop-filter: blur(10px);
+
+      animation: fade 0.35s ease;
+    }
+
+    .label {
+      font-size: 11px;
+
+      letter-spacing: 0.22em;
+
+      text-transform: uppercase;
+
+      opacity: 0.45;
+    }
+
+    .content {
+      font-size: 28px;
+
+      line-height: 1.45;
+
+      font-weight: 500;
+    }
+
+    .collection {
+      margin-top: 8px;
+
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 10px;
+    }
+
+    .collection-item {
+      border-radius: 14px;
+
+      padding: 12px;
+
+      font-size: 11px;
+
+      letter-spacing: 0.08em;
+
+      text-transform: uppercase;
+
+      border:
+        1px solid rgba(255,255,255,0.08);
+    }
+
+    .locked {
+      opacity: 0.25;
+
+      background:
+        rgba(255,255,255,0.03);
+    }
+
+    .unlocked {
+      background:
+        rgba(255,255,255,0.08);
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="title" id="title">
+      ARCHIVE 0 / 11
+    </div>
+
+    <button id="drawButton">
+      draw random entry
+    </button>
+
+    <div class="card" id="card">
+
+      <div class="label">
+        entry
+      </div>
+
+      <div class="content">
+        press the button
+      </div>
+
+    </div>
+
+    <div class="collection" id="collection"></div>
+
+  </div>
+
+  <script>
+
+    const entries = [
+
+      {
+        label: 'family size',
+        content:
+          '父 183cm｜母 167cm｜私 169cm｜弟 189cm<br>4人で歩くとかなり目立ちます。はぐれません。'
+      },
+
+      {
+        label: 'food',
+        content:
+          'pizza｜sushi｜fruits<br>肉類はかなり苦手です'
+      },
+
+      {
+        label: 'club history',
+        content:
+          '音楽部 → 帰宅部 → 合唱<br>帰宅部まじで極めてました。'
+      },
+
+      {
+        label: 'playlist',
+        content:
+          'Mrs. GREEN APPLE｜RADWIMPS｜SEVENTEEN｜IU｜Charlie Puth｜Sia'
+      },
+
+      {
+        label: 'anime',
+        content:
+          'かなり無知です。<br>進撃を見始めました。<br>おすすめ募集中。'
+      },
+
+      {
+        label: 'drama mode',
+        content:
+          'クールごとにほぼ全ドラマ1話視聴。<br>継続するか判断しています。'
+      },
+
+      {
+        label: 'current season',
+        content:
+          'リボーン｜田鎖ブラザーズ'
+      },
+
+      {
+        label: 'line stamp collection',
+        content:
+          '癖の強いLINEスタンプを集めています。<br>おすすめ：アメリカにいそうなマッチョ'
+      },
+
+      {
+        label: 'recommended spot',
+        content:
+          'LEGOLAND<br>魅力を永遠に語れます。'
+      },
+
+      {
+        label: 'location',
+        content:
+          '名古屋市東区｜千種駅付近<br>母の飯をタダで食らう日々。'
+      },
+
+      {
+        label: 'faculty',
+        content:
+          '教育学部<br>8月、お盆以外ずっと1限集中講義で泣いています。'
+      }
+
+    ];
+
+    const button =
+      document.getElementById('drawButton');
+
+    const card =
+      document.getElementById('card');
+
+    const collection =
+      document.getElementById('collection');
+
+    const title =
+      document.getElementById('title');
+
+    // 保存データ取得
+
+    let collected =
+      JSON.parse(
+        localStorage.getItem('collectedCards')
+      ) || [];
+
+    // 進捗更新
+
+    function updateProgress() {
+
+      title.textContent =
+        `ARCHIVE ${collected.length} / ${entries.length}`;
+
+    }
+
+    // コレクション表示
+
+    function renderCollection() {
+
+      collection.innerHTML = '';
+
+      entries.forEach(entry => {
+
+        const unlocked =
+          collected.some(
+            saved => saved.label === entry.label
+          );
+
+        const item =
+          document.createElement('div');
+
+        item.classList.add('collection-item');
+
+        if (unlocked) {
+
+          item.classList.add('unlocked');
+
+          item.innerHTML = entry.label;
+
+        } else {
+
+          item.classList.add('locked');
+
+          item.innerHTML = '???';
+
+        }
+
+        collection.appendChild(item);
+
+      });
+
+    }
+
+    // 抽選
+
+    button.addEventListener('click', () => {
+
+      const remaining =
+        entries.filter(
+          entry =>
+            !collected.some(
+              saved =>
+                saved.label === entry.label
+            )
+        );
+
+      // コンプ
+
+      if (remaining.length === 0) {
+
+        card.innerHTML =
+          '<div class="label">complete</div>' +
+          '<div class="content">all entries collected.</div>';
+
+        return;
+      }
+
+      // ランダム抽選
+
+      const random =
+        remaining[
+          Math.floor(
+            Math.random() * remaining.length
+          )
+        ];
+
+      // 保存
+
+      collected.push(random);
+
+      localStorage.setItem(
+        'collectedCards',
+        JSON.stringify(collected)
+      );
+
+      // 表示
+
+      card.innerHTML =
+        '<div class="label">' +
+        random.label +
+        '</div>' +
+
+        '<div class="content">' +
+        random.content +
+        '</div>';
+
+      // アニメーション
+
+      card.style.animation = 'none';
+
+      void card.offsetWidth;
+
+      card.style.animation =
+        'fade 0.35s ease';
+
+      // 更新
+
+      updateProgress();
+
+      renderCollection();
+
+    });
+
+    // 初期表示
 
     updateProgress();
 
-    card.innerHTML = `
-      <div class="label">${random.label}</div>
-      <div class="content">${random.content}</div>
-    `;
+    renderCollection();
 
-    card.style.animation = 'none';
-    void card.offsetWidth;
-    card.style.animation = 'fade 0.35s ease';
-  });
+  </script>
 
-  updateProgress();
-</script>
+</body>
+
+</html>
