@@ -297,10 +297,7 @@
 
     // 保存データ取得
 
-    let collected =
-      JSON.parse(
-        localStorage.getItem('collectedCards')
-      ) || [];
+   let collected = [];
 
     // 進捗更新
 
@@ -407,11 +404,6 @@ item.addEventListener('click', () => {
       // 保存
 
       collected.push(random);
-
-      localStorage.setItem(
-        'collectedCards',
-        JSON.stringify(collected)
-      );
 
       // 表示
 
